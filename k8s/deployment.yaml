@@ -30,4 +30,4 @@ spec:
       volumes:
       - name: efs-storage
         persistentVolumeClaim:
-          claimName: local-pvc
+          claimName: efs-claim
