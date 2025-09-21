@@ -58,7 +58,8 @@ jobs:
       - name: Install EFS CSI Driver
         run: |
           kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/ecr/?ref=release-1.7" \
-            | sed 's/us-west-2/ap-southeast-2/g' | kubectl apply -f -
+            | sed 's/us-west-2/ap-southeast-2/g' | kubectl apply -f - \
+            --validate=false
 
 
       # Apply namespace first
