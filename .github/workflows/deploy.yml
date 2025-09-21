@@ -59,11 +59,20 @@ jobs:
         run: |
           kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/ecr/?ref=release-1.6"
 
-      # Deploy manifests to EKS
+      # Apply namespace first
+      - name: Apply Namespace
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+
+      # Deploy manifests with new image injected
       - name: Deploy to EKS
         run: |
-          kubectl set image deployment/node-api \
-            node-api=${{ env.ECR_REPO }}:${{ env.IMAGE_TAG }} \
-            -n demo-app || true
+          kubectl kustomize k8s/ | \
+            sed "s|image:.*|image: $ECR_REPO:$IMAGE_TAG|" | \
+            kubectl apply -f -
+          
+      # Wait for rollout
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/node-api -n demo-app
 
-          kubectl apply -f k8s
