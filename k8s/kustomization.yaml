@@ -9,8 +9,8 @@ resources:
 
   # Storage resources
   - storageclass.yaml
-  - pv.yaml
-  - pvc.yaml
+  - persistentvolume.yaml
+  - persistentvolumeclaim.yaml
 
   # Secrets and ConfigMaps
   - secret.yaml
